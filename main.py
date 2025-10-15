@@ -18,11 +18,35 @@ products = [
 def get_all_products():
     return products
 
-@app.get("/product")
+@app.get("/product/{id}")
 def get_product(id: int):
     for product in products:
         if product.id == id:
             return product
+        
+    return {"error": "Product not found"}
+
+@app.post("/product")
+def add_product(product: Product):
+    products.append(product)
+
+
+@app.put("/product")
+def update_product(id:int, product: Product):
+    for i in range(len(products)):
+        if products[i].id == id:
+            products[i] = product
+            return "Product Updated Successfully"
+    return "Sorry! It didn't work"
+
+
+@app.delete("/product")
+def delete_product(id:int):
+    for i in range (len(products)):
+        if products[i].id == id:
+            del products[i]
+            return "Product Deleted"
+    return "Sorry! It didn't work"
 
 # To run this FastAPI application, you need to use Uvicorn.
 # 1. Make sure you have uvicorn installed: pip install "uvicorn[standard]"
